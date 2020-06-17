@@ -1,0 +1,18 @@
+{
+  "name": "home-exercise",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "start_cpy": "copy E:\\Code\\projects\\test\\devices.csv E:\\Code\\projects\\test\\devices\\devices.csv && node src/app.js",
+    "debug": "copy E:\\Code\\projects\\test\\devices.csv E:\\Code\\projects\\test\\devices\\devices.csv && node --inspect-brk src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
+}
