@@ -1,4 +1,4 @@
-The program is written in Node.js. Please install latest node before running the program.
+The program is written in Node.js. Please install latest node before running the program and run npm install in the home-exercise folder.
 In order to run the program, please run the program from home-exercise folder.
 
 
