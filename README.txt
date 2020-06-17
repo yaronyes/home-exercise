@@ -1,5 +1,5 @@
 The program is written in Node.js. Please install latest node before running the program.
-In order to run the program, please unzip the file and run the program from home-exercise folder.
+In order to run the program, please run the program from home-exercise folder.
 
 
 Running the program
