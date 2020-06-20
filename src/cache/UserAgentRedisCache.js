@@ -29,7 +29,6 @@ class UserAgentRedisCache extends UACache {
     async addUserAgent(ua, data) {    
         try {
             await this.#setAsync(ua, JSON.stringify(data));
-            console.log(data);
         } catch (err){
             console.log(err);
         }        
@@ -42,8 +41,7 @@ class UserAgentRedisCache extends UACache {
     async getUserAgent(ua) {                
         try {
             const data =  await this.#getAsync(ua);
-            console.log("get", data);
-            return JSON.parse(data);;
+            return JSON.parse(data);
         } catch (err){
             console.log(err);
         }        
