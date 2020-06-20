@@ -1,7 +1,9 @@
 const fs = require('fs');
 const { getExtraDataFromAPI } = require('./userstack');
 const UserAgentCache = require('../cache/UserAgentCache');
+const UserAgentRedisCache = require('../cache/UserAgentRedisCache');
 const { createEnrichedCsvHeader, createEnrichedCsvData } = require('./csvFormatter');
+const config = require('../../config/config.json');
 
 /*
 Writting the enriched CSV file to the disk
@@ -33,11 +35,12 @@ If it is not in the cache, get it from the external API and save it in the cache
 */
 const getExtraData = async (uaCache, ua, index) => {
     try{
+        debugger
         // traying to get the extra data from the cache 
-        let exraData = uaCache.getUserAgent(ua);
+        let exraData = await uaCache.getUserAgent(ua);
         if(!exraData) {                
             exraData = await getExtraDataFromAPI(ua);                
-            uaCache.addUserAgent(ua, exraData);                         
+            await uaCache.addUserAgent(ua, exraData);                         
         }
         return { exraData, index };
     } catch(error) {
@@ -60,6 +63,8 @@ const checkValidityandGetUaColumnPosition = (header) => {
     return splittedHeader.findIndex(value => value === '"userAgent"');
 }
 
+
+var uaCache;
 /*
 The main function. reads the provided CSV file, parse it, enriche it from the cache
 or from external API and save it.
@@ -68,7 +73,8 @@ Getting the extra data is done by using parallel calls.
 const processCsvFile = (filePath) => {
     try {
         // create the cache
-        const uaCache = new UserAgentCache();                
+        uaCache = config.caching.useRedis ? new UserAgentRedisCache() : new UserAgentCache();
+        console.log(config.caching.useRedis ? 'Using Redis as cache' : 'Using local file as cache');
         
         // read the CSV file
         const lines = getCsvLines(filePath);
@@ -110,13 +116,18 @@ const processCsvFile = (filePath) => {
             })
             
             // write the enriched CSV file
-            writeCsvFile(filePath, newFileData);
+            writeCsvFile(filePath, newFileData);            
             console.log('CSV file is enriched');
+            uaCache.close().then(() => {
+                process.exit();
+            }).catch((err) => console.log(err));
+
+            //process.exit();
         })                                
     } catch (error) {        
         console.log(error);
         console.log('Failed to process and enrich CSV file');
-    }    
+    } 
 }
 
 module.exports = {

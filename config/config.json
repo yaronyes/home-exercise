@@ -2,6 +2,13 @@
     "userstack_api": {
         "api_key": "",
         "api_url": "http://api.userstack.com/detect",
-        "using_mock": false
-    }    
+        "using_mock": true
+    },
+    "caching": {
+        "useRedis": false,
+        "redis_connection": {
+            "host": "127.0.0.1",
+            "port": "6379"
+        }        
+    }
 }

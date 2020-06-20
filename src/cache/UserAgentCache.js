@@ -1,11 +1,13 @@
 const fs = require('fs');
 const path = require('path');
+const UACache = require('./UACache');
 
 // the cache file location.
 const CACHE_FILE = path.join(__dirname, '../../cache_file/user_agents.json'); 
 
-class UserAgentCache {
+class UserAgentCache extends UACache {
     constructor() {
+        super();
         // private methods
         saveUserAgents.bind(this);
         loadUserAgents.bind(this);        
@@ -20,7 +22,7 @@ class UserAgentCache {
     /*
     Adding extra date received from the API to the cache.
     */
-    addUserAgent(ua, data)  {            
+    async addUserAgent(ua, data)  {            
         this.#userAgents.push({
             ua,
             data
@@ -34,7 +36,7 @@ class UserAgentCache {
     Getting the exra data for user agent from the cache.
     Returns undefined if the user agent is not in the cache.
     */
-    getUserAgent(ua) {                
+   async getUserAgent(ua) {                
         const userAgent = this.#userAgents.find((agent) => agent.ua === ua);
         return userAgent ? userAgent.data : undefined;
     }
@@ -42,7 +44,7 @@ class UserAgentCache {
     /*
     Removing user agent from the cache. currently not used.
     */
-    removeUserAgent(ua) {        
+   async removeUserAgent(ua) {        
         try {
             const afterRemoval = this.#userAgents.filter((agent) => agent.ua !== ua);
         
